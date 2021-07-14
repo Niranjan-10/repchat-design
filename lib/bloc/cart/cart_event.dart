@@ -4,19 +4,19 @@ part of 'cart_bloc.dart';
 abstract class CartEvent {}
 
 class AddButtonClickedEvent extends CartEvent {
-  final Product? product;
+  final ProductDemo? product;
 
   AddButtonClickedEvent({this.product});
 }
 
 class CountIncrementEvent extends CartEvent {
-  final Product? product;
+  final ProductDemo? product;
 
   CountIncrementEvent({this.product});
 }
 
 class CountDecrementEvent extends CartEvent {
-  final Product? product;
+  final ProductDemo? product;
 
   CountDecrementEvent({this.product});
 }

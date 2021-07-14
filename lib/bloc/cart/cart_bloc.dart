@@ -8,7 +8,7 @@ part 'cart_event.dart';
 part 'cart_state.dart';
 
 class CartBloc extends Bloc<CartEvent, CartState> {
-  final List<Product>? products;
+  final List<ProductDemo>? products;
   int? cartCount;
   double? total;
 

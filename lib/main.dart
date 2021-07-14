@@ -1,11 +1,21 @@
+import 'package:badges/badges.dart';
 import 'package:clay_containers/clay_containers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:repchat_design/bloc/dentium_cart/bloc/dentiumcart_bloc.dart';
 import 'package:repchat_design/orders/billing_profiles.dart';
 import 'package:animations/animations.dart';
 import 'package:repchat_design/orders/product_list.dart';
 
+import 'orders/dentium_cart_view.dart';
+
 void main() {
-  runApp(Home());
+  runApp(MultiBlocProvider(providers: [
+    BlocProvider(
+      create: (BuildContext context) =>
+          DentiumcartBloc(productsInCart: [], cartCount: 0, total: 0),
+    )
+  ], child: Home()));
 }
 
 class Home extends StatelessWidget {
@@ -33,6 +43,37 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        actions: [
+          BlocBuilder<DentiumcartBloc, DentiumcartState>(
+              builder: (context, state) {
+            if (state.cartCount == 0) {
+              return Icon(Icons.shopping_basket_outlined);
+            }
+
+            return Container(
+              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10.0),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => DentiumCartView()));
+                },
+                child: Badge(
+                  badgeColor: Colors.amberAccent,
+                  badgeContent: Text(
+                    state.cartCount.toString(),
+                  ),
+                  child: Icon(
+                    Icons.shopping_basket_outlined,
+                  ),
+                ),
+              ),
+            );
+          })
+        ],
+      ),
       floatingActionButton: OpenContainer(
         transitionDuration: Duration(milliseconds: 600),
         openBuilder: (BuildContext context, _) {
