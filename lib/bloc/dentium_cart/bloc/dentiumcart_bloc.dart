@@ -25,14 +25,19 @@ class DentiumcartBloc extends Bloc<DentiumcartEvent, DentiumcartState> {
     if (event is AddButtonClickedEvent) {
       event.product!.isChecked = true;
 
-      event.product!.count = event.product!.count! + 1;
-
       this.cartCount = this.cartCount! + 1;
       this.total = state.total! + event.product!.mrp!.toDouble();
 
       print("Working");
 
-      this.productsInCart!.add(event.product!);
+      int index = this.productsInCart!.indexOf(event.product!);
+      if (index != -1) {
+        this.productsInCart![index].count =
+            this.productsInCart![index].count! + 1;
+      } else {
+        event.product!.count = event.product!.count! + 1;
+        this.productsInCart!.add(event.product!);
+      }
 
       print(state.productsInCart);
       yield DentiumcartState(
@@ -50,6 +55,10 @@ class DentiumcartBloc extends Bloc<DentiumcartEvent, DentiumcartState> {
 
       if (this.productsInCart![index].count! <= 0) {
         this.productsInCart!.removeAt(index);
+      }
+
+      if (this.total! <= 0) {
+        this.total = 0;
       }
 
       yield DentiumcartState(

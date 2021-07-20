@@ -172,122 +172,88 @@ class _ProductTypeListState extends State<ProductTypeList> {
         ));
 
     return Scaffold(
-        appBar: AppBar(
-          actions: [
-            BlocBuilder<DentiumcartBloc, DentiumcartState>(
-                builder: (context, state) {
-              if (state.cartCount == 0) {
-                return Icon(Icons.shopping_basket_outlined);
-              }
+      appBar: AppBar(
+        actions: [
+          BlocBuilder<DentiumcartBloc, DentiumcartState>(
+              builder: (context, state) {
+            if (state.cartCount == 0) {
+              return Icon(Icons.shopping_basket_outlined);
+            }
 
-              return Container(
-                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10.0),
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => DentiumCartView()));
-                  },
-                  child: Badge(
-                    badgeColor: Colors.amberAccent,
-                    badgeContent: Text(
-                      state.cartCount.toString(),
-                    ),
-                    child: Icon(
-                      Icons.shopping_basket_outlined,
-                    ),
+            return Container(
+              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10.0),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => DentiumCartView()));
+                },
+                child: Badge(
+                  badgeColor: Colors.amberAccent,
+                  badgeContent: Text(
+                    state.cartCount.toString(),
+                  ),
+                  child: Icon(
+                    Icons.shopping_basket_outlined,
                   ),
                 ),
-              );
-            })
-          ],
+              ),
+            );
+          })
+        ],
+      ),
+      body: Container(
+        child: BlocBuilder<DentiumcartBloc, DentiumcartState>(
+          builder: (context, state) {
+            return ListView.builder(
+              itemCount: widget.productTypeList!.length,
+              itemBuilder: (context, index) {
+                return Card(
+                  child: Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 10.0, vertical: 12.0),
+                    child: ListTile(
+                      trailing: ElevatedButton(
+                        child: Text("Add"),
+                        onPressed: () {
+                          context.read<DentiumcartBloc>().add(
+                              AddButtonClickedEvent(
+                                  product: widget.productTypeList![index]));
+                        },
+                      ),
+                      title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("${widget.productTypeList![index].name}"),
+                          SizedBox(
+                            height: 8.0,
+                          ),
+                          Text(
+                              "${widget.productTypeList![index].wareHouseCode}"),
+                          SizedBox(
+                            height: 8.0,
+                          ),
+                          Text(
+                              "${widget.productTypeList![index].articleNumber}"),
+                          SizedBox(
+                            height: 8.0,
+                          ),
+                          Text("${widget.productTypeList![index].mrp}"),
+                          SizedBox(
+                            height: 8.0,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            );
+          },
         ),
-        body: Container(
-            child: Stepper(
-          type: StepperType.horizontal,
-          currentStep: _index,
-          onStepCancel: () {
-            if (_index > 0) {
-              setState(() {
-                _index -= 1;
-              });
-            }
-          },
-          onStepContinue: () {
-            if (_index <= 0) {
-              setState(() {
-                _index += 1;
-              });
-            }
-          },
-          onStepTapped: (int index) {
-            setState(() {
-              _index = index;
-            });
-          },
-          steps: <Step>[
-            Step(
-              title: const Text('Step 1 title'),
-              content: Container(
-                  alignment: Alignment.centerLeft,
-                  child: const Text('Content for Step 1')),
-            ),
-            const Step(
-              title: Text('Step 2 title'),
-              content: Text('Content for Step 2'),
-            ),
-          ],
-        ))
-        // Container(
-        //   child: BlocBuilder<DentiumcartBloc, DentiumcartState>(
-        //     builder: (context, state) {
-        //       return ListView.builder(
-        //         itemCount: productTypeList!.length,
-        //         itemBuilder: (context, index) {
-        //           return Card(
-        //             child: Container(
-        //               padding:
-        //                   EdgeInsets.symmetric(horizontal: 10.0, vertical: 12.0),
-        //               child: ListTile(
-        //                 trailing: ElevatedButton(
-        //                   child: Text("Add"),
-        //                   onPressed: () {
-        //                     context.read<DentiumcartBloc>().add(
-        //                         AddButtonClickedEvent(
-        //                             product: productTypeList![index]));
-        //                   },
-        //                 ),
-        //                 title: Column(
-        //                   crossAxisAlignment: CrossAxisAlignment.start,
-        //                   children: [
-        //                     Text("${productTypeList![index].name}"),
-        //                     SizedBox(
-        //                       height: 8.0,
-        //                     ),
-        //                     Text("${productTypeList![index].wareHouseCode}"),
-        //                     SizedBox(
-        //                       height: 8.0,
-        //                     ),
-        //                     Text("${productTypeList![index].articleNumber}"),
-        //                     SizedBox(
-        //                       height: 8.0,
-        //                     ),
-        //                     Text("${productTypeList![index].mrp}"),
-        //                     SizedBox(
-        //                       height: 8.0,
-        //                     ),
-        //                   ],
-        //                 ),
-        //               ),
-        //             ),
-        //           );
-        //         },
-        //       );
-        //     },
-        //   ),
-        // ),
-        );
+      ),
+    );
   }
 }
 
